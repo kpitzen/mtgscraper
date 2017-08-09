@@ -30,10 +30,10 @@ if __name__ == '__main__':
     if ARGS.subparser_name == 'extract':
         if ARGS.goldfish:
             EXTRACT_POOL = Pool(5)
-            EXTRACTORS = EXTRACT_POOL.map(extractors.MTGGoldFisDeckhExtractor
+            EXTRACTORS = EXTRACT_POOL.map(extractors.MTGGoldFishDeckExtractor
                                           , random.choices(range(1, 100000, 1), k=20))
             for extractor in EXTRACTORS:
-                print(extractor.payload, extractor.deck_id)
+                print(extractor.deck_data, extractor.deck_id)
         with open(join(DATA_DIR, 'goldfish_extract.bin'), 'wb') as extract_file:
             pickle.dump(EXTRACTORS, extract_file)
 
@@ -45,5 +45,9 @@ if __name__ == '__main__':
             with open(join(DATA_DIR, 'goldfish_extract.bin'), 'rb') as extract_file:
                 LOAD_DATA = pickle.load(extract_file)
             for data_element in LOAD_DATA:
-                print(data_element)
-                DATA_LOADER.load_data(data_element)
+                try:
+                    DATA_LOADER.load_data(data_element)
+                except Exception:
+                    raise
+                else:
+                    print('>>Successfully loaded: {}'.format(data_element.deck_id))

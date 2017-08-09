@@ -2,7 +2,7 @@
 
 import abc
 import datetime
-
+from helpers import helpers
 class MTGLoader():
     '''abstract loader class'''
 
@@ -42,9 +42,7 @@ class MTGDeckLoader(MTGLoader):
 
     def load_data(self, input_data):
         input_payload = input_data.payload
-        print(input_payload)
         for row in input_payload:
-            print(row) #TODO: Or maybe we add that type inference here?
-            row['creation_time'] = str(self.primary_key)
+            dynamo_payload = helpers.format_python_dict_for_dynamo(row)
             self._session.put_item(TableName='mtgdecks',
-                                   Item=row)
+                                   Item=dynamo_payload)

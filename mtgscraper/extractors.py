@@ -46,7 +46,7 @@ class MTGExtractor():
         return self.deck_data.to_dict(orient='records') #TODO: Add type-formatting for dynamo here?
 
 
-class MTGGoldFisDeckhExtractor(MTGExtractor):
+class MTGGoldFishDeckExtractor(MTGExtractor):
     '''Class intended to access data from MTGGoldfish'''
 
     def __init__(self, deck_number):
@@ -69,6 +69,7 @@ class MTGGoldFisDeckhExtractor(MTGExtractor):
         try:
             deck_dataframe = pd.read_html(url, attrs={'class': 'deck-view-deck-table'})[0]
             deck_dataframe.columns = ['count', 'name', 'mana_cost', 'price']
+            deck_dataframe['row_id'] = deck_dataframe.index
         except HTTPError:
             deck_dataframe = None
         self._deck_data = deck_dataframe
