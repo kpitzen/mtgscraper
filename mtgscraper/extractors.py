@@ -3,6 +3,7 @@ import abc
 from urllib.error import HTTPError
 
 import pandas as pd
+from numpy import isnan
 
 
 class MTGExtractor():
@@ -70,9 +71,14 @@ class MTGGoldFishDeckExtractor(MTGExtractor):
             deck_dataframe = pd.read_html(url, attrs={'class': 'deck-view-deck-table'})[0]
             deck_dataframe.columns = ['count', 'name', 'mana_cost', 'price']
             deck_dataframe['row_id'] = deck_dataframe.index
+            try:
+                filtered_deck_dataframe = deck_dataframe[deck_dataframe['name'].notnull()]
+            except KeyError:
+                print(deck_dataframe)
+                raise
         except HTTPError:
-            deck_dataframe = None
-        self._deck_data = deck_dataframe
+            filtered_deck_dataframe = None
+        self._deck_data = filtered_deck_dataframe
 
 
     @property
