@@ -11,6 +11,7 @@ class MTGExtractor():
 
     def __init__(self, url):
         self._url = url
+        self.__payload = None
 
     @property
     @abc.abstractproperty
@@ -35,6 +36,15 @@ class MTGExtractor():
     def deck_id(self, value):
         raise NotImplementedError('NEEDS TO BE OVERRIDDEN')
 
+    @property
+    def payload(self):
+        '''JSON representation of deck data'''
+        return self.__payload
+
+    @payload.getter
+    def payload(self):
+        return self.deck_data.to_json(orient='records')
+
 
 class MTGGoldFisDeckhExtractor(MTGExtractor):
     '''Class intended to access data from MTGGoldfish'''
@@ -57,6 +67,7 @@ class MTGGoldFisDeckhExtractor(MTGExtractor):
     def deck_data(self, url):
         try:
             deck_dataframe = pd.read_html(url, attrs={'class': 'deck-view-deck-table'})[0]
+            deck_dataframe.columns = ['count', 'name', 'mana_cost', 'price']
         except HTTPError:
             deck_dataframe = None
         self._deck_data = deck_dataframe

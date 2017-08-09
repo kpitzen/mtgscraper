@@ -26,5 +26,7 @@ if __name__ == '__main__':
             EXTRACT_POOL = Pool(5)
             EXTRACTORS = EXTRACT_POOL.map(extractors.MTGGoldFisDeckhExtractor
                                           , random.choices(range(1, 100000, 1), k=20))
+            for extractor in EXTRACTORS:
+                print(extractor.payload, extractor.deck_id)
         with open(join(DATA_DIR, 'goldfish_extract.bin'), 'wb') as extract_file:
             pickle.dump(EXTRACTORS, extract_file)
