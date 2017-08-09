@@ -43,7 +43,7 @@ class MTGExtractor():
 
     @payload.getter
     def payload(self):
-        return self.deck_data.to_json(orient='records')
+        return self.deck_data.to_dict(orient='records') #TODO: Add type-formatting for dynamo here?
 
 
 class MTGGoldFisDeckhExtractor(MTGExtractor):
@@ -57,6 +57,7 @@ class MTGGoldFisDeckhExtractor(MTGExtractor):
         self.deck_data = self._url.format(deck_number)
         print('>>Successfully extracted: {}'.format(self._url.format(deck_number)))
         self.deck_id = deck_number
+        self.deck_data['deck_id'] = self.deck_id
 
     @property
     def deck_data(self):
