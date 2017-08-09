@@ -12,6 +12,30 @@ class MTGExtractor():
     def __init__(self, url):
         self._url = url
 
+    @property
+    @abc.abstractproperty
+    def deck_data(self):
+        '''a pandas dataframe containing decklist returned by url'''
+        raise NotImplementedError('NEEDS TO BE OVERRIDDEN')
+
+    @deck_data.setter
+    @abc.abstractproperty
+    def deck_data(self, url):
+        raise NotImplementedError('NEEDS TO BE OVERRIDDEN')
+
+
+    @property
+    @abc.abstractproperty
+    def deck_id(self):
+        '''numerical id of deck. unique across all decks'''
+        raise NotImplementedError('NEEDS TO BE OVERRIDDEN')
+
+    @deck_id.setter
+    @abc.abstractproperty
+    def deck_id(self, value):
+        raise NotImplementedError('NEEDS TO BE OVERRIDDEN')
+
+
 class MTGGoldFisDeckhExtractor(MTGExtractor):
     '''Class intended to access data from MTGGoldfish'''
 
@@ -40,8 +64,9 @@ class MTGGoldFisDeckhExtractor(MTGExtractor):
 
     @property
     def deck_id(self):
+        '''numerical id of deck. unique across all decks'''
         return self.__deck_id
 
     @deck_id.setter
     def deck_id(self, value):
-        self.__deck_id = value
+        self.__deck_id = int(value)
