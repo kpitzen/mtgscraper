@@ -26,8 +26,8 @@ This will populate your existing dynamodb table with 20 randomly chosen decklist
 
 ### TODO:
 --- 
-[] Add more sources
+- [ ] Add more sources
 
-[] Improve load performance
+- [ ] Improve load performance
 
-[] Benchmark and optimize payload creation
+- [ ] Benchmark and optimize payload creation
